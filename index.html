@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="img/favicon.ico">
-        <title>My SilkMoth Docs</title>
+        <title>SilkMoth Documentation</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/fontawesome.min.css" rel="stylesheet">
         <link href="css/brands.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@
     <body class="homepage">
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href=".">My SilkMoth Docs</a>
+                <a class="navbar-brand" href=".">SilkMoth Documentation</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -107,8 +107,12 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#silkmoth" class="nav-link">SilkMoth</a>
+            <li class="nav-item" data-bs-level="1"><a href="#lsdipro-ss2025" class="nav-link">🦋 LSDIPro SS2025</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#silkmoth-an-efficient-method-for-finding-related-sets" class="nav-link">📄 SilkMoth: An Efficient Method for Finding Related Sets</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -116,7 +120,70 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="silkmoth">SilkMoth</h1></div>
+<h1 id="lsdipro-ss2025">🦋 LSDIPro SS2025</h1>
+<h2 id="silkmoth-an-efficient-method-for-finding-related-sets">📄 <a href="https://doi.org/10.14778/3115404.3115413">SilkMoth: An Efficient Method for Finding Related Sets</a></h2>
+<p>A project inspired by the SilkMoth paper, exploring efficient techniques for related set discovery.</p>
+<hr />
+<h3 id="team-members">👥 Team Members</h3>
+<ul>
+<li><strong>Andreas Wilms</strong></li>
+<li><strong>Sarra Daknou</strong></li>
+<li><strong>Amina Iqbal</strong></li>
+<li><strong>Jakob Berschneider</strong></li>
+</ul>
+<hr />
+<h3 id="project-documentation">📘 Project Documentation</h3>
+<h4 id="core-pipeline-steps">🔁 Core Pipeline Steps</h4>
+<p><img alt="Figure 1: SILKMOTH Framework Overview" src="figures/Pipeline.png" /></p>
+<p><em>Figure 1. SILKMOTH pipeline framework. Source: Deng et al., "SILKMOTH: An Efficient Method for Finding Related Sets with Maximum Matching Constraints", VLDB 2017.<br />
+Licensed under CC BY-NC-ND 4.0.</em></p>
+<h4 id="1-tokenization">1. <a href="pages/tokenizer/">Tokenization</a></h4>
+<p>Each element in every set is tokenized based on the selected similarity function:
+- <strong>Jaccard Similarity</strong>: Elements are split into whitespace-delimited tokens.
+- <strong>Edit Similarity</strong>: Elements are split into overlapping <code>q</code>-grams (e.g., 3-grams).</p>
+<h4 id="2-inverted-index-construction">2. <a href="pages/inverted_index/">Inverted Index Construction</a></h4>
+<p>An <strong>inverted index</strong> is built from the reference set <code>R</code> to map each token to a list of <code>(set, element)</code> pairs in which it occurs. This allows fast lookup of candidate sets that share tokens with a query.</p>
+<h4 id="3-signature-generation">3. <a href="pages/signature_generator/">Signature Generation</a></h4>
+<p>A <strong>signature</strong> is a subset of tokens selected from each set such that:
+- Any related set must share at least one signature token.
+- Signature size is minimized to reduce candidate space.</p>
+<p><strong>Signature selection heuristics</strong> (e.g., cost/value greedy ranking) are used to approximate the optimal valid signature, which is NP-complete to compute exactly.</p>
+<h4 id="4-candidate-selection">4. <a href="pages/candidate_selector/">Candidate Selection</a></h4>
+<p>For each set <code>R</code>, we retrieve from the inverted index all sets <code>S</code> that share at least one token with <code>R</code>’s signature. These become the <strong>candidate sets</strong> for further evaluation.</p>
+<h4 id="5-refinement-filters">5. <a href="pages/candidate_selector/">Refinement Filters</a></h4>
+<p>Two filters reduce false positives among the candidates:</p>
+<ul>
+<li><strong>Check Filter</strong>: Uses an upper bound on similarity to eliminate sets that cannot meet the threshold.</li>
+<li><strong>Nearest Neighbor Filter</strong>: Approximates the maximum matching score using the nearest neighbor similarity for each element in <code>R</code>.</li>
+</ul>
+<h4 id="6-verification-via-maximum-matching">6. <a href="pages/verifier/">Verification via Maximum Matching</a></h4>
+<p>For the remaining candidates, we compute the <strong>maximum weighted bipartite matching</strong> between elements of <code>R</code> and <code>S</code>, using the chosen similarity function as edge weights.</p>
+<p>Only sets whose matching score meets or exceeds a threshold <code>δ</code> are considered <strong>related</strong>.</p>
+<hr />
+<h4 id="modes-of-operation">🧪 Modes of Operation</h4>
+<ul>
+<li><strong>Discovery Mode</strong>: Compare all pairs of sets to find all related set pairs.<br>
+<strong>Use Case</strong>: When you want to check which sets (e.g., columns in a database) are related to a specific reference set.</li>
+<li><strong>Search Mode</strong>: Given a reference set, find all sets related to it.<br>
+<strong>Use Case</strong>: When you want to find all related set pairs in a dataset, for tasks like schema matching or entity deduplication.</li>
+</ul>
+<hr />
+<h4 id="supported-similarity-functions">📐 Supported Similarity Functions</h4>
+<ul>
+<li><strong>Jaccard Similarity</strong></li>
+<li><strong>Edit Similarity</strong> (Levenshtein-based)</li>
+<li>Optional <strong>minimum similarity threshold</strong> <code>α</code> can be enforced on element comparisons.</li>
+</ul>
+<hr />
+<h3 id="installing-from-source">Installing from source</h3>
+<ol>
+<li>Run <code>pip install src/</code> to install</li>
+<li>(optional) Run <code>python -m unittest discover -s src/silkmoth/test -p "*.py"</code> to execute the unit tests</li>
+</ol>
+<h3 id="running-the-experiment">Running the experiment</h3>
+<ol>
+<li>Run <code>python experiments/run.py</code> to execute the experiment</li>
+</ol></div>
             </div>
         </div>
 
@@ -198,5 +265,5 @@
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-07-10 13:38:01.985185+00:00
+Build Date UTC : 2025-07-11 11:45:23.299649+00:00
 -->

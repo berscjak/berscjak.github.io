@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Inverted Index - My SilkMoth Docs</title>
+        <title>Inverted Index - SilkMoth Documentation</title>
         <link href="../../css/bootstrap.min.css" rel="stylesheet">
         <link href="../../css/fontawesome.min.css" rel="stylesheet">
         <link href="../../css/brands.min.css" rel="stylesheet">
@@ -25,7 +25,7 @@
     <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href="../..">My SilkMoth Docs</a>
+                <a class="navbar-brand" href="../..">SilkMoth Documentation</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -107,25 +107,19 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#inverted_index" class="nav-link">inverted_index</a>
-              <ul class="nav flex-column">
             <li class="nav-item" data-bs-level="2"><a href="#silkmoth.inverted_index" class="nav-link">inverted_index</a>
               <ul class="nav flex-column">
               </ul>
             </li>
+            
             <li class="nav-item" data-bs-level="2"><a href="#silkmoth.inverted_index.InvertedIndex" class="nav-link">InvertedIndex</a>
               <ul class="nav flex-column">
-              </ul>
-            </li>
               </ul>
             </li>
         </ul>
     </div>
 </div></div>
                     <div class="col-md-9" role="main">
-
-<h1 id="inverted_index">inverted_index</h1>
-
 
 <div class="doc doc-object doc-module">
 
@@ -301,7 +295,7 @@
 <span class="sd">        Gives all tokens similar like dict.keys().</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            set: A set-like object providing all keys</span>
+<span class="sd">            set (set): A set-like object providing all keys</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_table</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
@@ -310,7 +304,7 @@
 <span class="sd">        Access inverted list from inverted index using square brackets.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            token: Input token</span>
+<span class="sd">            token (str): Input token</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            list:   A list of all (set, element) tuples which contain the input </span>
@@ -326,11 +320,11 @@
 <span class="sd">        sufficient.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            token: Input token</span>
+<span class="sd">            token (str): Input token</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            list: A list of all (set index, element index) tuples for (set, </span>
-<span class="sd">            element) tuples which contain the input tuple</span>
+<span class="sd">            list:   A list of all (set index, element index) tuples for (set, </span>
+<span class="sd">                    element) tuples which contain the input tuple</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_table</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown token&quot;</span><span class="p">)</span> 
@@ -356,8 +350,8 @@
 <span class="sd">        where set_idx matches the given set_idx.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            token: The token to search in the inverted index.</span>
-<span class="sd">            set_idx: The ID of the set we want the element indexes for.</span>
+<span class="sd">            token (str): The token to search in the inverted index.</span>
+<span class="sd">            set_idx (int): The ID of the set we want the element indexes for.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            list: All (set_idx, element_idx) tuples where the token appears in the given set.</span>
@@ -417,6 +411,7 @@
                 <code>token</code>
             </td>
             <td>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -474,7 +469,7 @@
 <span class="sd">    Access inverted list from inverted index using square brackets.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        token: Input token</span>
+<span class="sd">        token (str): Input token</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        list:   A list of all (set, element) tuples which contain the input </span>
@@ -606,6 +601,7 @@ sufficient.</p>
                 <code>token</code>
             </td>
             <td>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -635,17 +631,8 @@ sufficient.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>A list of all (set index, element index) tuples for (set, </p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>element) tuples which contain the input tuple</p>
+                <p>A list of all (set index, element index) tuples for (set, 
+    element) tuples which contain the input tuple</p>
               </div>
             </td>
           </tr>
@@ -677,11 +664,11 @@ sufficient.</p>
 <span class="sd">    sufficient.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        token: Input token</span>
+<span class="sd">        token (str): Input token</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list: A list of all (set index, element index) tuples for (set, </span>
-<span class="sd">        element) tuples which contain the input tuple</span>
+<span class="sd">        list:   A list of all (set index, element index) tuples for (set, </span>
+<span class="sd">                element) tuples which contain the input tuple</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_table</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown token&quot;</span><span class="p">)</span> 
@@ -723,6 +710,7 @@ where set_idx matches the given set_idx.</p>
                 <code>token</code>
             </td>
             <td>
+                  <code><span title="str">str</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -738,6 +726,7 @@ where set_idx matches the given set_idx.</p>
                 <code>set_idx</code>
             </td>
             <td>
+                  <code><span title="int">int</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -804,8 +793,8 @@ where set_idx matches the given set_idx.</p>
 <span class="sd">    where set_idx matches the given set_idx.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        token: The token to search in the inverted index.</span>
-<span class="sd">        set_idx: The ID of the set we want the element indexes for.</span>
+<span class="sd">        token (str): The token to search in the inverted index.</span>
+<span class="sd">        set_idx (int): The ID of the set we want the element indexes for.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        list: All (set_idx, element_idx) tuples where the token appears in the given set.</span>
@@ -952,6 +941,7 @@ where set_idx matches the given set_idx.</p>
       <tbody>
           <tr class="doc-section-item">
 <td><code>set</code></td>            <td>
+                  <code><span title="set">set</span></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -977,7 +967,7 @@ where set_idx matches the given set_idx.</p>
 <span class="sd">    Gives all tokens similar like dict.keys().</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        set: A set-like object providing all keys</span>
+<span class="sd">        set (set): A set-like object providing all keys</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lookup_table</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 </code></pre></div></td></tr></table></div>

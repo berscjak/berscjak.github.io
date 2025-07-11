@@ -12,7 +12,6 @@ for path in MODULES:
 
     doc_path = os.path.join(OUT_DIR, f"{name}.md")
     with open(doc_path, "w") as f:
-        f.write(f"# {name}\n\n")
         f.write("::: silkmoth." + name + "\n")
         f.write("    rendering:\n")
         f.write("      show_signature: true\n")
