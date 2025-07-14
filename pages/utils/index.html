@@ -171,7 +171,8 @@
 a superset of another set R. Set pairs (R, S) with <span class="arithmatex">\(|R| &gt; |S|\)</span> should be filtered
 in advance. Set-Containment is defined as <span class="arithmatex">\(contain(R, S) = mm\_score / |R|\)</span>.</p>
 <h4 id="silkmoth.utils.contain--examples">Examples</h4>
-<pre><code>&gt;&gt;&gt; contain(2, 3, 2)
+<pre><code>&gt;&gt;&gt; from silkmoth.utils contain
+&gt;&gt;&gt; contain(2, 3, 2)
 1.0
 &gt;&gt;&gt; contain(2, 3, 1.5)
 0.75
@@ -266,8 +267,7 @@ in advance. Set-Containment is defined as <span class="arithmatex">\(contain(R, 
 
             <details class="quote">
               <summary>Source code in <code>silkmoth/utils.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">66</span>
-<span class="normal">67</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">67</span>
 <span class="normal">68</span>
 <span class="normal">69</span>
 <span class="normal">70</span>
@@ -292,7 +292,9 @@ in advance. Set-Containment is defined as <span class="arithmatex">\(contain(R, 
 <span class="normal">89</span>
 <span class="normal">90</span>
 <span class="normal">91</span>
-<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="n">reference_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">source_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mm_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">contain</span><span class="p">(</span><span class="n">reference_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">source_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mm_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes Set-Containment metric which checks whether one set S is approximately</span>
 <span class="sd">    a superset of another set R. Set pairs (R, S) with $|R| &gt; |S|$ should be filtered</span>
@@ -301,6 +303,7 @@ in advance. Set-Containment is defined as <span class="arithmatex">\(contain(R, 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ```</span>
+<span class="sd">    &gt;&gt;&gt; from silkmoth.utils contain</span>
 <span class="sd">    &gt;&gt;&gt; contain(2, 3, 2)</span>
 <span class="sd">    1.0</span>
 <span class="sd">    &gt;&gt;&gt; contain(2, 3, 1.5)</span>
@@ -538,7 +541,8 @@ does not exceed this threshold, this function returns zero.</p>
         <p>Computes Set-Similarity metric which checks whether two sets R and S are approximately 
 equivalent. Set-Similarity is defined as <span class="arithmatex">\(similar(R, S) = mm\_score / (|R| + |S| - mm\_score)\)</span>.</p>
 <h4 id="silkmoth.utils.similar--examples">Examples</h4>
-<pre><code>&gt;&gt;&gt; similar(3, 3, 3)
+<pre><code>&gt;&gt;&gt; from silkmoth.utils import similar
+&gt;&gt;&gt; similar(3, 3, 3)
 1.0
 &gt;&gt;&gt; similar(3, 3, 1.5)
 0.3333333333333333
@@ -655,7 +659,8 @@ equivalent. Set-Similarity is defined as <span class="arithmatex">\(similar(R, S
 <span class="normal">61</span>
 <span class="normal">62</span>
 <span class="normal">63</span>
-<span class="normal">64</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">similar</span><span class="p">(</span><span class="n">reference_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">source_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mm_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">64</span>
+<span class="normal">65</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">similar</span><span class="p">(</span><span class="n">reference_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">source_set_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mm_score</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes Set-Similarity metric which checks whether two sets R and S are approximately </span>
 <span class="sd">    equivalent. Set-Similarity is defined as $similar(R, S) = mm\_score / (|R| + |S| - mm\_score)$.</span>
@@ -663,6 +668,7 @@ equivalent. Set-Similarity is defined as <span class="arithmatex">\(similar(R, S
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    ```</span>
+<span class="sd">    &gt;&gt;&gt; from silkmoth.utils import similar</span>
 <span class="sd">    &gt;&gt;&gt; similar(3, 3, 3)</span>
 <span class="sd">    1.0</span>
 <span class="sd">    &gt;&gt;&gt; similar(3, 3, 1.5)</span>

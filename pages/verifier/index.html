@@ -177,6 +177,7 @@ improve performance.</p>
 <h4 id="silkmoth.verifier.Verifier--examples">Examples</h4>
 <pre><code>&gt;&gt;&gt; from silkmoth.inverted_index import InvertedIndex
 &gt;&gt;&gt; from silkmoth.utils import similar, jaccard_similarity
+&gt;&gt;&gt; from silkmoth.verifier import Verifier
 &gt;&gt;&gt; S1 = [{&quot;Apple&quot;, &quot;Pear&quot;, &quot;Car&quot;}, {&quot;Apple&quot;, &quot;Sun&quot;, &quot;Cat&quot;}]
 &gt;&gt;&gt; S2 = [{&quot;Apple&quot;, &quot;Berlin&quot;, &quot;Sun&quot;}, {&quot;Apple&quot;}]
 &gt;&gt;&gt; S = [S1, S2]
@@ -316,7 +317,8 @@ improve performance.</p>
 <span class="normal">143</span>
 <span class="normal">144</span>
 <span class="normal">145</span>
-<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Verifier</span><span class="p">:</span>
+<span class="normal">146</span>
+<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Verifier</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The verifier component executes the final verification step in the SilkMoth</span>
 <span class="sd">    pipeline. During verification SilMoth performs the maximum matching between</span>
@@ -336,6 +338,7 @@ improve performance.</p>
 <span class="sd">    ```</span>
 <span class="sd">    &gt;&gt;&gt; from silkmoth.inverted_index import InvertedIndex</span>
 <span class="sd">    &gt;&gt;&gt; from silkmoth.utils import similar, jaccard_similarity</span>
+<span class="sd">    &gt;&gt;&gt; from silkmoth.verifier import Verifier</span>
 <span class="sd">    &gt;&gt;&gt; S1 = [{&quot;Apple&quot;, &quot;Pear&quot;, &quot;Car&quot;}, {&quot;Apple&quot;, &quot;Sun&quot;, &quot;Cat&quot;}]</span>
 <span class="sd">    &gt;&gt;&gt; S2 = [{&quot;Apple&quot;, &quot;Berlin&quot;, &quot;Sun&quot;}, {&quot;Apple&quot;}]</span>
 <span class="sd">    &gt;&gt;&gt; S = [S1, S2]</span>
@@ -561,8 +564,7 @@ improve performance.</p>
 
             <details class="quote">
               <summary>Source code in <code>silkmoth/verifier.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">62</span>
-<span class="normal">63</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">63</span>
 <span class="normal">64</span>
 <span class="normal">65</span>
 <span class="normal">66</span>
@@ -576,7 +578,8 @@ improve performance.</p>
 <span class="normal">74</span>
 <span class="normal">75</span>
 <span class="normal">76</span>
-<span class="normal">77</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">related_thresh</span><span class="p">,</span> <span class="n">sim_metric</span><span class="p">,</span> <span class="n">sim_func</span><span class="p">,</span> <span class="n">sim_thresh</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="normal">77</span>
+<span class="normal">78</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">related_thresh</span><span class="p">,</span> <span class="n">sim_metric</span><span class="p">,</span> <span class="n">sim_func</span><span class="p">,</span> <span class="n">sim_thresh</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">reduction</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Initialize the verifier with some parameters.</span>
 
@@ -696,8 +699,7 @@ function.</p>
 
             <details class="quote">
               <summary>Source code in <code>silkmoth/verifier.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 79</span>
-<span class="normal"> 80</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 80</span>
 <span class="normal"> 81</span>
 <span class="normal"> 82</span>
 <span class="normal"> 83</span>
@@ -717,7 +719,8 @@ function.</p>
 <span class="normal"> 97</span>
 <span class="normal"> 98</span>
 <span class="normal"> 99</span>
-<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_mm_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">source_set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">100</span>
+<span class="normal">101</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_mm_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">source_set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function that computes the maximum weighted bipartite matching score, where elements </span>
 <span class="sd">    correspond to nodes and the edges are weighted using the similarity </span>
@@ -857,8 +860,7 @@ function.</p>
 
             <details class="quote">
               <summary>Source code in <code>silkmoth/verifier.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">127</span>
-<span class="normal">128</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">128</span>
 <span class="normal">129</span>
 <span class="normal">130</span>
 <span class="normal">131</span>
@@ -876,7 +878,8 @@ function.</p>
 <span class="normal">143</span>
 <span class="normal">144</span>
 <span class="normal">145</span>
-<span class="normal">146</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_related_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">:</span> <span class="n">InvertedIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="normal">146</span>
+<span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_related_sets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">candidates</span><span class="p">:</span> <span class="nb">set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">:</span> <span class="n">InvertedIndex</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gives all candidate sets that are related to the reference set.</span>
 
@@ -989,8 +992,7 @@ bipartite matching.</p>
 
             <details class="quote">
               <summary>Source code in <code>silkmoth/verifier.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">104</span>
-<span class="normal">105</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">105</span>
 <span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
@@ -1009,7 +1011,8 @@ bipartite matching.</p>
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
-<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_relatedness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">source_set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">124</span>
+<span class="normal">125</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_relatedness</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">source_set</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function that gives the relatedness score by computing the maximum weighted</span>
 <span class="sd">    bipartite matching.</span>
