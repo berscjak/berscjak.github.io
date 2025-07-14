@@ -138,15 +138,19 @@
 <p><em>Figure 1. SILKMOTH pipeline framework. Source: Deng et al., "SILKMOTH: An Efficient Method for Finding Related Sets with Maximum Matching Constraints", VLDB 2017.<br />
 Licensed under CC BY-NC-ND 4.0.</em></p>
 <h4 id="1-tokenization">1. <a href="pages/tokenizer/">Tokenization</a></h4>
-<p>Each element in every set is tokenized based on the selected similarity function:
-- <strong>Jaccard Similarity</strong>: Elements are split into whitespace-delimited tokens.
-- <strong>Edit Similarity</strong>: Elements are split into overlapping <code>q</code>-grams (e.g., 3-grams).</p>
+<p>Each element in every set is tokenized based on the selected similarity function:</p>
+<ul>
+<li><strong>Jaccard Similarity</strong>: Elements are split into whitespace-delimited tokens.</li>
+<li><strong>Edit Similarity</strong>: Elements are split into overlapping <code>q</code>-grams (e.g., 3-grams).</li>
+</ul>
 <h4 id="2-inverted-index-construction">2. <a href="pages/inverted_index/">Inverted Index Construction</a></h4>
 <p>An <strong>inverted index</strong> is built from the reference set <code>R</code> to map each token to a list of <code>(set, element)</code> pairs in which it occurs. This allows fast lookup of candidate sets that share tokens with a query.</p>
 <h4 id="3-signature-generation">3. <a href="pages/signature_generator/">Signature Generation</a></h4>
-<p>A <strong>signature</strong> is a subset of tokens selected from each set such that:
-- Any related set must share at least one signature token.
-- Signature size is minimized to reduce candidate space.</p>
+<p>A <strong>signature</strong> is a subset of tokens selected from each set such that:</p>
+<ul>
+<li>Any related set must share at least one signature token.</li>
+<li>Signature size is minimized to reduce candidate space.</li>
+</ul>
 <p><strong>Signature selection heuristics</strong> (e.g., cost/value greedy ranking) are used to approximate the optimal valid signature, which is NP-complete to compute exactly.</p>
 <h4 id="4-candidate-selection">4. <a href="pages/candidate_selector/">Candidate Selection</a></h4>
 <p>For each set <code>R</code>, we retrieve from the inverted index all sets <code>S</code> that share at least one token with <code>R</code>’s signature. These become the <strong>candidate sets</strong> for further evaluation.</p>
@@ -197,6 +201,7 @@ Licensed under CC BY-NC-ND 4.0.</em></p>
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="js/base.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script src="search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
@@ -265,5 +270,5 @@ Licensed under CC BY-NC-ND 4.0.</em></p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-07-11 11:45:23.299649+00:00
+Build Date UTC : 2025-07-14 12:54:49.828536+00:00
 -->
