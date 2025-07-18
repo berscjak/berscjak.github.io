@@ -159,6 +159,29 @@
     <div class="doc doc-contents ">
 
 
+        <p>The signature generator executes the signature generation step in the SilkMoth
+pipeline. During signature generation SilkMoth constructs a signature for a 
+reference set R by selecting the “smallest” set of tokens from R such that 
+if another set S does not share any tokens with R's signature, R and S are 
+not related.</p>
+<p>SilkMoth supports three different signature schemes: Weighted Signature Scheme
+(Def. 5 in <a href="https://doi.org/10.14778/3115404.3115413">paper</a>), Skyline Signature
+Scheme (Def. 9), and Dichotomy Signature Scheme (Def. 10).</p>
+<h4 id="silkmoth.signature_generator.SignatureGenerator--examples">Examples</h4>
+<pre><code>&gt;&gt;&gt; from silkmoth.inverted_index import InvertedIndex
+&gt;&gt;&gt; from silkmoth.signature_generator import SignatureGenerator
+&gt;&gt;&gt; S1 = [{&quot;Apple&quot;, &quot;Pear&quot;, &quot;Car&quot;}, {&quot;Apple&quot;, &quot;Sun&quot;, &quot;Cat&quot;}]
+&gt;&gt;&gt; S2 = [{&quot;Apple&quot;, &quot;Berlin&quot;, &quot;Sun&quot;}, {&quot;Apple&quot;}]
+&gt;&gt;&gt; S = [S1, S2]
+&gt;&gt;&gt; I = InvertedIndex(S)
+&gt;&gt;&gt; R = [{&quot;Apple&quot;}, {&quot;Sun&quot;, &quot;Berlin&quot;, &quot;Paris&quot;}]
+&gt;&gt;&gt; sig_gen = SignatureGenerator()
+&gt;&gt;&gt; sig_gen.get_signature(R, I, 0.3)
+['Apple', 'Sun', 'Berlin']
+&gt;&gt;&gt; sig_gen.get_signature(R, I, 0.5)
+['Apple', 'Berlin']
+</code></pre>
+
 
 
 
@@ -332,12 +355,272 @@
 <span class="normal">170</span>
 <span class="normal">171</span>
 <span class="normal">172</span>
-<span class="normal">173</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SignatureGenerator</span><span class="p">:</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span>
+<span class="normal">241</span>
+<span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span>
+<span class="normal">246</span>
+<span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span>
+<span class="normal">251</span>
+<span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span>
+<span class="normal">290</span>
+<span class="normal">291</span>
+<span class="normal">292</span>
+<span class="normal">293</span>
+<span class="normal">294</span>
+<span class="normal">295</span>
+<span class="normal">296</span>
+<span class="normal">297</span>
+<span class="normal">298</span>
+<span class="normal">299</span>
+<span class="normal">300</span>
+<span class="normal">301</span>
+<span class="normal">302</span>
+<span class="normal">303</span>
+<span class="normal">304</span>
+<span class="normal">305</span>
+<span class="normal">306</span>
+<span class="normal">307</span>
+<span class="normal">308</span>
+<span class="normal">309</span>
+<span class="normal">310</span>
+<span class="normal">311</span>
+<span class="normal">312</span>
+<span class="normal">313</span>
+<span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
+<span class="normal">328</span>
+<span class="normal">329</span>
+<span class="normal">330</span>
+<span class="normal">331</span>
+<span class="normal">332</span>
+<span class="normal">333</span>
+<span class="normal">334</span>
+<span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span>
+<span class="normal">354</span>
+<span class="normal">355</span>
+<span class="normal">356</span>
+<span class="normal">357</span>
+<span class="normal">358</span>
+<span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span>
+<span class="normal">374</span>
+<span class="normal">375</span>
+<span class="normal">376</span>
+<span class="normal">377</span>
+<span class="normal">378</span>
+<span class="normal">379</span>
+<span class="normal">380</span>
+<span class="normal">381</span>
+<span class="normal">382</span>
+<span class="normal">383</span>
+<span class="normal">384</span>
+<span class="normal">385</span>
+<span class="normal">386</span>
+<span class="normal">387</span>
+<span class="normal">388</span>
+<span class="normal">389</span>
+<span class="normal">390</span>
+<span class="normal">391</span>
+<span class="normal">392</span>
+<span class="normal">393</span>
+<span class="normal">394</span>
+<span class="normal">395</span>
+<span class="normal">396</span>
+<span class="normal">397</span>
+<span class="normal">398</span>
+<span class="normal">399</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">SignatureGenerator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The signature generator executes the signature generation step in the SilkMoth</span>
+<span class="sd">    pipeline. During signature generation SilkMoth constructs a signature for a </span>
+<span class="sd">    reference set R by selecting the “smallest” set of tokens from R such that </span>
+<span class="sd">    if another set S does not share any tokens with R&#39;s signature, R and S are </span>
+<span class="sd">    not related.</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sig_type</span><span class="o">=</span><span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="sd">    SilkMoth supports three different signature schemes: Weighted Signature Scheme</span>
+<span class="sd">    (Def. 5 in [paper](https://doi.org/10.14778/3115404.3115413)), Skyline Signature</span>
+<span class="sd">    Scheme (Def. 9), and Dichotomy Signature Scheme (Def. 10).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    ```</span>
+<span class="sd">    &gt;&gt;&gt; from silkmoth.inverted_index import InvertedIndex</span>
+<span class="sd">    &gt;&gt;&gt; from silkmoth.signature_generator import SignatureGenerator</span>
+<span class="sd">    &gt;&gt;&gt; S1 = [{&quot;Apple&quot;, &quot;Pear&quot;, &quot;Car&quot;}, {&quot;Apple&quot;, &quot;Sun&quot;, &quot;Cat&quot;}]</span>
+<span class="sd">    &gt;&gt;&gt; S2 = [{&quot;Apple&quot;, &quot;Berlin&quot;, &quot;Sun&quot;}, {&quot;Apple&quot;}]</span>
+<span class="sd">    &gt;&gt;&gt; S = [S1, S2]</span>
+<span class="sd">    &gt;&gt;&gt; I = InvertedIndex(S)</span>
+<span class="sd">    &gt;&gt;&gt; R = [{&quot;Apple&quot;}, {&quot;Sun&quot;, &quot;Berlin&quot;, &quot;Paris&quot;}]</span>
+<span class="sd">    &gt;&gt;&gt; sig_gen = SignatureGenerator()</span>
+<span class="sd">    &gt;&gt;&gt; sig_gen.get_signature(R, I, 0.3)</span>
+<span class="sd">    [&#39;Apple&#39;, &#39;Sun&#39;, &#39;Berlin&#39;]</span>
+<span class="sd">    &gt;&gt;&gt; sig_gen.get_signature(R, I, 0.5)</span>
+<span class="sd">    [&#39;Apple&#39;, &#39;Berlin&#39;]</span>
+<span class="sd">    ```</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Compute a signature for a reference set given a signature type. Uses </span>
-<span class="sd">        weighted signature scheme by default.</span>
+<span class="sd">        Initialize the signature generator with default parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">=</span> <span class="n">jaccard_similarity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sig_type</span><span class="o">=</span><span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">,</span> <span class="n">sim_fun</span> <span class="o">=</span> <span class="n">jaccard_similarity</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute a signature for a reference set according to the chosen signature type.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            reference_set (list): Tokenized reference set.</span>
@@ -345,27 +628,121 @@
 <span class="sd">            delta (float): Relatedness threshold factor.</span>
 <span class="sd">            alpha (float): Similarity threshold factor.</span>
 <span class="sd">            sig_type (SigType): Type of signature.</span>
+<span class="sd">            sim_fun (callable): Similarity function (phi) to use.</span>
+<span class="sd">            q (int): Length of each q-chunk for edit similarity.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            list: A list of str for selected tokens forming the signature.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">=</span> <span class="n">sim_fun</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span>
+
+            <span class="c1"># If q is too large, no valid weighted signature exists</span>
+            <span class="n">q_bound</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">q</span> <span class="o">&gt;=</span> <span class="n">q_bound</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2"> is too large for delta = </span><span class="si">{</span><span class="n">delta</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">; &quot;</span>
+                    <span class="s2">&quot;no valid weighted signature exists -&gt; falling back to brute-force.&quot;</span>
+                <span class="p">)</span>
+                <span class="c1"># returning all non-overlapping q-chunks so nothing is pruned</span>
+                <span class="n">all_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">reference_set</span><span class="p">:</span>
+                    <span class="n">joined</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+                    <span class="n">all_chunks</span> <span class="o">+=</span> <span class="p">[</span>
+                        <span class="n">joined</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">q</span><span class="p">]</span>
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">joined</span><span class="p">)</span> <span class="o">-</span> <span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+                    <span class="p">]</span>
+                <span class="k">return</span> <span class="n">all_chunks</span>
+
         <span class="k">match</span> <span class="n">sig_type</span><span class="p">:</span>
             <span class="k">case</span> <span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">sim_fun</span> <span class="o">==</span> <span class="n">edit_similarity</span> <span class="ow">or</span> <span class="n">sim_fun</span> <span class="o">==</span> <span class="n">N_edit_similarity</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
             <span class="k">case</span> <span class="n">SigType</span><span class="o">.</span><span class="n">SKYLINE</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_skyline_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">)</span> <span class="ow">and</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_simthresh_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_skyline_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
             <span class="k">case</span> <span class="n">SigType</span><span class="o">.</span><span class="n">DICHOTOMY</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_dichotomy_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">)</span> <span class="ow">and</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_simthresh_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_dichotomy_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
             <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown signature type&quot;</span><span class="p">)</span> 
 
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_simthresh_signature_edit_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Builds a similarity-threshold signature for edit similarity as described in the SILKMOTH Paper in </span>
+<span class="sd">        Section 7.2.</span>
+
+<span class="sd">        For each element r_i in the reference set, it ensures that the signature contains at least </span>
+<span class="sd">        m_i = floor((1 - alpha)/alpha * |q_chunks(r_i)|) + 1 q-chunks, so that any element </span>
+<span class="sd">        sharing fewer than m_i chunks cannot achieve Eds ≥ alpha.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            reference_set (list): Tokenized reference set.</span>
+<span class="sd">            inverted_index (InvertedIndex): Index to evaluate token cost.</span>
+<span class="sd">            delta (float): Relatedness threshold factor.</span>
+<span class="sd">            alpha (float): Similarity threshold factor.</span>
+<span class="sd">            q (int): Length of each q-chunk for edit similarity.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            list: A list of str for selected q-chunks forming the signature.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">weighted_sig_edit_sim</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
+        <span class="n">simthresh_sig</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">weighted_sig_edit_sim</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">elem_tokens</span> <span class="ow">in</span> <span class="n">reference_set</span><span class="p">:</span>
+            <span class="c1"># compute all q-chunks of each element</span>
+            <span class="n">joined</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">elem_tokens</span><span class="p">)</span>
+            <span class="n">chunks</span> <span class="o">=</span> <span class="p">[</span><span class="n">joined</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">joined</span><span class="p">)</span> <span class="o">-</span> <span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+            <span class="n">m_i</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+
+            <span class="c1"># determine how many base chunks from this element are already in weighted signature</span>
+            <span class="n">k_i</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">weighted_sig_edit_sim</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k_i</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">m_i</span><span class="p">:</span>
+                <span class="c1"># need cheapest additional chunks -&gt; sort all chunks by cost = inverted_index size</span>
+                <span class="n">sorted_chunks</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+                    <span class="n">r</span><span class="p">,</span>
+                    <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">inverted_index</span><span class="o">.</span><span class="n">get_indexes</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="k">if</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">inverted_index</span><span class="o">.</span><span class="n">lookup_table</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="c1"># add cheapest chunks up to m_i</span>
+                <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">sorted_chunks</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">simthresh_sig</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">m_i</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="n">simthresh_sig</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">simthresh_sig</span><span class="p">)</span>    
+
+
     <span class="k">def</span><span class="w"> </span><span class="nf">_generate_skyline_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">:</span> <span class="n">InvertedIndex</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
-        <span class="n">weighted</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>
-        <span class="n">unflattened</span> <span class="o">=</span> <span class="p">[</span><span class="n">weighted</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">r_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="n">reference_set</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">==</span> <span class="n">jaccard_similarity</span><span class="p">:</span>
+            <span class="n">weighted</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>
+            <span class="n">unflattened</span> <span class="o">=</span> <span class="p">[</span><span class="n">weighted</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">r_i</span><span class="p">)</span> <span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="n">reference_set</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">):</span>
+            <span class="n">weighted</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+            <span class="n">unflattened</span> <span class="o">=</span> <span class="p">[</span><span class="n">weighted</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r_i</span><span class="p">)[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">r_i</span><span class="p">))</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span> <span class="k">for</span> <span class="n">r_i</span> <span class="ow">in</span> <span class="n">reference_set</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown similarity function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
         <span class="n">skyline</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">unflattened</span><span class="p">):</span>
-            <span class="n">rhs</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_set</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">==</span> <span class="n">jaccard_similarity</span><span class="p">:</span>
+                <span class="n">rhs</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_set</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">):</span>
+                <span class="n">chunks</span> <span class="o">=</span> <span class="n">get_q_chunks</span><span class="p">(</span><span class="n">reference_set</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+                <span class="n">rhs</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown similarity function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">rhs</span><span class="p">:</span>
                 <span class="n">skyline</span> <span class="o">|=</span> <span class="n">k</span>
             <span class="k">else</span><span class="p">:</span>
@@ -384,13 +761,25 @@
 <span class="sd">        sim-thresh signature (m_i).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 1. First, generate the optimal weighted signature, K.</span>
-        <span class="n">weighted_signature_K</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">==</span> <span class="n">jaccard_similarity</span><span class="p">:</span>
+            <span class="n">weighted_signature_K</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">):</span>
+            <span class="n">weighted_signature_K</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown similarity function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">final_dichotomy_sig</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
         <span class="c1"># 2. For each element r_i, decide whether to use its k_i or the full r_i.</span>
         <span class="k">for</span> <span class="n">r_i_list</span> <span class="ow">in</span> <span class="n">reference_set</span><span class="p">:</span>
-            <span class="n">r_i</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">r_i_list</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">==</span> <span class="n">jaccard_similarity</span><span class="p">:</span>
+                <span class="n">r_i</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">r_i_list</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">):</span>
+                <span class="n">chunks</span> <span class="o">=</span> <span class="n">get_q_chunks</span><span class="p">(</span><span class="n">r_i_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+                <span class="n">r_i</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown similarity function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="n">r_i</span><span class="p">:</span>
                 <span class="k">continue</span>
 
@@ -400,7 +789,14 @@
             <span class="c1"># 4. Determine m_i: the optimal sim-thresh signature for this element.</span>
 
             <span class="c1"># 4a. Calculate the required size for the sim-thresh signature.</span>
-            <span class="n">m_i_size</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_i</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">==</span> <span class="n">jaccard_similarity</span><span class="p">:</span>
+                <span class="n">m_i_size</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_i</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">):</span>
+                <span class="n">chunks</span> <span class="o">=</span> <span class="n">get_q_chunks</span><span class="p">(</span><span class="n">r_i_list</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">q</span><span class="p">)</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+                <span class="n">m_i_size</span> <span class="o">=</span> <span class="n">floor</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">/</span> <span class="n">alpha</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">r</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown similarity function: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="c1"># 4b. Get all tokens from the original element r_i and sort by cost.</span>
             <span class="n">element_tokens</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">r_i</span><span class="p">)</span>
@@ -498,6 +894,85 @@
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">selected_sig</span><span class="p">)</span>
+
+    <span class="c1"># Following the same logic of _generate_weighted_signature</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_weighted_signature_edit_similarity</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">delta</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">reference_set</span><span class="p">)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">*</span> <span class="n">n</span>  
+
+        <span class="n">token_to_elems</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>   <span class="c1"># map q-chunk -&gt; list of element indexes</span>
+        <span class="n">token_value</span> <span class="o">=</span> <span class="p">{}</span>                     <span class="c1"># map q-chunk -&gt; accumulated value</span>
+
+        <span class="n">r_sizes</span> <span class="o">=</span> <span class="p">[]</span>        <span class="c1"># number of q-chunks per element</span>
+        <span class="n">element_chunks</span> <span class="o">=</span> <span class="p">[]</span> <span class="c1"># list of q-chunks per element</span>
+
+        <span class="c1"># Step 1: Build q-chunks and token values</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elem_tokens</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reference_set</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">elem_tokens</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Element at index </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2"> is empty and will be skipped.&quot;</span><span class="p">)</span>
+                <span class="n">r_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="n">element_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Join the list of tokens into a string</span>
+            <span class="n">joined</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">elem_tokens</span><span class="p">)</span>
+
+            <span class="c1"># Extract non-overlapping q-chunks</span>
+            <span class="n">chunks</span> <span class="o">=</span> <span class="p">[</span><span class="n">joined</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="n">q</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">joined</span><span class="p">)</span> <span class="o">-</span> <span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">q</span><span class="p">)]</span>
+            <span class="n">chunk_set</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+            <span class="n">element_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span>
+
+            <span class="n">num_chunks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk_set</span><span class="p">)</span>
+            <span class="n">r_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">num_chunks</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">num_chunks</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">weight</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">num_chunks</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">chunk_set</span><span class="p">:</span>
+                <span class="n">token_to_elems</span><span class="p">[</span><span class="n">chunk</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">token_value</span><span class="p">[</span><span class="n">chunk</span><span class="p">]</span> <span class="o">=</span> <span class="n">token_value</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">+</span> <span class="n">weight</span> <span class="c1"># value = sum of weights (for each chunk)</span>
+
+        <span class="c1"># Step 2: Build heap (cost/value, token)</span>
+        <span class="n">heap</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">chunk</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">token_value</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">inverted_index</span><span class="o">.</span><span class="n">get_indexes</span><span class="p">(</span><span class="n">chunk</span><span class="p">))</span>  <span class="c1"># number of sets where chunk appears</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+            <span class="n">heapq</span><span class="o">.</span><span class="n">heappush</span><span class="p">(</span><span class="n">heap</span><span class="p">,</span> <span class="p">(</span><span class="n">cost</span> <span class="o">/</span> <span class="n">val</span><span class="p">,</span> <span class="n">chunk</span><span class="p">))</span>
+
+        <span class="c1"># Step 3: Greedy selection</span>
+        <span class="n">selected_sig</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="n">current_k_counts</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span>
+        <span class="n">total_score</span> <span class="o">=</span> <span class="mf">0.0</span>  
+
+        <span class="k">while</span> <span class="n">heap</span> <span class="ow">and</span> <span class="n">total_score</span> <span class="o">&lt;</span> <span class="n">theta</span><span class="p">:</span>
+            <span class="n">ratio</span><span class="p">,</span> <span class="n">chunk</span> <span class="o">=</span> <span class="n">heapq</span><span class="o">.</span><span class="n">heappop</span><span class="p">(</span><span class="n">heap</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">selected_sig</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">ratio</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">):</span>
+                <span class="k">break</span>
+
+            <span class="n">selected_sig</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">r_sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">element_chunks</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+                    <span class="n">current_k_counts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="n">total_score</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+                <span class="n">r_sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">r_sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">current_k_counts</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">r_sizes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">selected_sig</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
               </details>
 
@@ -516,16 +991,48 @@
 <div class="doc doc-object doc-function">
 
 
-<h3 id="silkmoth.signature_generator.SignatureGenerator.get_signature" class="doc doc-heading">
-            <code class="highlight language-python"><span class="n">get_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sig_type</span><span class="o">=</span><span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">)</span></code>
+<h3 id="silkmoth.signature_generator.SignatureGenerator.__init__" class="doc doc-heading">
+            <code class="highlight language-python"><span class="fm">__init__</span><span class="p">()</span></code>
 
 </h3>
 
 
     <div class="doc doc-contents ">
 
-        <p>Compute a signature for a reference set given a signature type. Uses 
-weighted signature scheme by default.</p>
+        <p>Initialize the signature generator with default parameters.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>silkmoth/signature_generator.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initialize the signature generator with default parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">=</span> <span class="n">jaccard_similarity</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="mi">3</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="silkmoth.signature_generator.SignatureGenerator.get_signature" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">get_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sig_type</span><span class="o">=</span><span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">,</span> <span class="n">sim_fun</span><span class="o">=</span><span class="n">jaccard_similarity</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span></code>
+
+</h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Compute a signature for a reference set according to the chosen signature type.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -608,7 +1115,7 @@ weighted signature scheme by default.</p>
                 <code>sig_type</code>
             </td>
             <td>
-                  <code><span title="silkmoth.utils.SigType">SigType</span></code>
+                  <code><a class="autorefs autorefs-internal" title="SigType (silkmoth.utils.SigType)" href="../utils/#silkmoth.utils.SigType">SigType</a></code>
             </td>
             <td>
               <div class="doc-md-description">
@@ -617,6 +1124,38 @@ weighted signature scheme by default.</p>
             </td>
             <td>
                   <code><span title="silkmoth.utils.SigType.WEIGHTED">WEIGHTED</span></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>sim_fun</code>
+            </td>
+            <td>
+                  <code><span title="callable">callable</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Similarity function (phi) to use.</p>
+              </div>
+            </td>
+            <td>
+                  <code><a class="autorefs autorefs-internal" title="jaccard_similarity(x, y, sim_thresh=0) (silkmoth.utils.jaccard_similarity)" href="../utils/#silkmoth.utils.jaccard_similarity">jaccard_similarity</a></code>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>q</code>
+            </td>
+            <td>
+                  <code><span title="int">int</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Length of each q-chunk for edit similarity.</p>
+              </div>
+            </td>
+            <td>
+                  <code>3</code>
             </td>
           </tr>
       </tbody>
@@ -648,33 +1187,64 @@ weighted signature scheme by default.</p>
 
             <details class="quote">
               <summary>Source code in <code>silkmoth/signature_generator.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">10</span>
-<span class="normal">11</span>
-<span class="normal">12</span>
-<span class="normal">13</span>
-<span class="normal">14</span>
-<span class="normal">15</span>
-<span class="normal">16</span>
-<span class="normal">17</span>
-<span class="normal">18</span>
-<span class="normal">19</span>
-<span class="normal">20</span>
-<span class="normal">21</span>
-<span class="normal">22</span>
-<span class="normal">23</span>
-<span class="normal">24</span>
-<span class="normal">25</span>
-<span class="normal">26</span>
-<span class="normal">27</span>
-<span class="normal">28</span>
-<span class="normal">29</span>
-<span class="normal">30</span>
-<span class="normal">31</span>
-<span class="normal">32</span>
-<span class="normal">33</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sig_type</span><span class="o">=</span><span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_signature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sig_type</span><span class="o">=</span><span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">,</span> <span class="n">sim_fun</span> <span class="o">=</span> <span class="n">jaccard_similarity</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Compute a signature for a reference set given a signature type. Uses </span>
-<span class="sd">    weighted signature scheme by default.</span>
+<span class="sd">    Compute a signature for a reference set according to the chosen signature type.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        reference_set (list): Tokenized reference set.</span>
@@ -682,17 +1252,50 @@ weighted signature scheme by default.</p>
 <span class="sd">        delta (float): Relatedness threshold factor.</span>
 <span class="sd">        alpha (float): Similarity threshold factor.</span>
 <span class="sd">        sig_type (SigType): Type of signature.</span>
+<span class="sd">        sim_fun (callable): Similarity function (phi) to use.</span>
+<span class="sd">        q (int): Length of each q-chunk for edit similarity.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        list: A list of str for selected tokens forming the signature.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sim_fun</span> <span class="o">=</span> <span class="n">sim_fun</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">q</span> <span class="o">=</span> <span class="n">q</span>
+
+        <span class="c1"># If q is too large, no valid weighted signature exists</span>
+        <span class="n">q_bound</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">delta</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">q</span> <span class="o">&gt;=</span> <span class="n">q_bound</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;q=</span><span class="si">{</span><span class="n">q</span><span class="si">}</span><span class="s2"> is too large for delta = </span><span class="si">{</span><span class="n">delta</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">; &quot;</span>
+                <span class="s2">&quot;no valid weighted signature exists -&gt; falling back to brute-force.&quot;</span>
+            <span class="p">)</span>
+            <span class="c1"># returning all non-overlapping q-chunks so nothing is pruned</span>
+            <span class="n">all_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">reference_set</span><span class="p">:</span>
+                <span class="n">joined</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">elem</span><span class="p">)</span>
+                <span class="n">all_chunks</span> <span class="o">+=</span> <span class="p">[</span>
+                    <span class="n">joined</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="n">q</span><span class="p">]</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">joined</span><span class="p">)</span> <span class="o">-</span> <span class="n">q</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="k">return</span> <span class="n">all_chunks</span>
+
     <span class="k">match</span> <span class="n">sig_type</span><span class="p">:</span>
         <span class="k">case</span> <span class="n">SigType</span><span class="o">.</span><span class="n">WEIGHTED</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sim_fun</span> <span class="o">==</span> <span class="n">edit_similarity</span> <span class="ow">or</span> <span class="n">sim_fun</span> <span class="o">==</span> <span class="n">N_edit_similarity</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_weighted_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
         <span class="k">case</span> <span class="n">SigType</span><span class="o">.</span><span class="n">SKYLINE</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_skyline_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">)</span> <span class="ow">and</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_simthresh_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_skyline_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
         <span class="k">case</span> <span class="n">SigType</span><span class="o">.</span><span class="n">DICHOTOMY</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_dichotomy_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sim_fun</span> <span class="ow">in</span> <span class="p">(</span><span class="n">edit_similarity</span><span class="p">,</span> <span class="n">N_edit_similarity</span><span class="p">)</span> <span class="ow">and</span> <span class="n">alpha</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_simthresh_signature_edit_similarity</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_dichotomy_signature</span><span class="p">(</span><span class="n">reference_set</span><span class="p">,</span> <span class="n">inverted_index</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">alpha</span><span class="p">)</span>
         <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown signature type&quot;</span><span class="p">)</span> 
 </code></pre></div></td></tr></table></div>

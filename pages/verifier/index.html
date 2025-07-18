@@ -165,7 +165,7 @@
 
 
         <p>The verifier component executes the final verification step in the SilkMoth
-pipeline. During verification SilMoth performs the maximum matching between
+pipeline. During verification SilkMoth performs the maximum matching between
 every candidate set and the reference set R. The sets whose maximum matching
 score surpass the relatedness threshold δ are the verified related sets to R.</p>
 <p>For maximum matching computation we treat every element of the two sets as 
@@ -321,7 +321,7 @@ improve performance.</p>
 <span class="normal">147</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Verifier</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The verifier component executes the final verification step in the SilkMoth</span>
-<span class="sd">    pipeline. During verification SilMoth performs the maximum matching between</span>
+<span class="sd">    pipeline. During verification SilkMoth performs the maximum matching between</span>
 <span class="sd">    every candidate set and the reference set R. The sets whose maximum matching</span>
 <span class="sd">    score surpass the relatedness threshold δ are the verified related sets to R.</span>
 
@@ -381,8 +381,8 @@ improve performance.</p>
 <span class="sd">            source_set (list): Tokenized source set S</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            float: Maximum matching score (sum of weights of edges in the </span>
-<span class="sd">            matching)</span>
+<span class="sd">            float:  Maximum matching score (sum of weights of edges in the </span>
+<span class="sd">                    matching)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">r_idx</span><span class="p">,</span> <span class="n">r_elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reference_set</span><span class="p">):</span>
@@ -679,17 +679,8 @@ function.</p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Maximum matching score (sum of weights of edges in the </p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>matching)</p>
+                <p>Maximum matching score (sum of weights of edges in the 
+    matching)</p>
               </div>
             </td>
           </tr>
@@ -731,8 +722,8 @@ function.</p>
 <span class="sd">        source_set (list): Tokenized source set S</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        float: Maximum matching score (sum of weights of edges in the </span>
-<span class="sd">        matching)</span>
+<span class="sd">        float:  Maximum matching score (sum of weights of edges in the </span>
+<span class="sd">                matching)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">r_idx</span><span class="p">,</span> <span class="n">r_elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">reference_set</span><span class="p">):</span>
@@ -1125,17 +1116,8 @@ both sets that has an identical match in the other set. </p>
             </td>
             <td>
               <div class="doc-md-description">
-                <p>Reduced reference set, reduced source set and number</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="tuple">tuple</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>of identical elements.</p>
+                <p>Reduced reference set, reduced source set and number
+                of identical elements.</p>
               </div>
             </td>
           </tr>
@@ -1176,8 +1158,8 @@ both sets that has an identical match in the other set. </p>
 <span class="sd">        source_set: Tokenized source set S</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        (list, list, int): Reduced reference set, reduced source set and number</span>
-<span class="sd">        of identical elements.</span>
+<span class="sd">        (list, list, int):  Reduced reference set, reduced source set and number</span>
+<span class="sd">                            of identical elements.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">r_reduced</span> <span class="o">=</span> <span class="n">reference_set</span><span class="p">[:]</span>
     <span class="n">s_reduced</span> <span class="o">=</span> <span class="n">source_set</span><span class="p">[:]</span>
